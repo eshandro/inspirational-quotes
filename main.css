@@ -47,6 +47,9 @@ header {
 	margin: 20px 0;
 }
 
+.quote-form {
+	display: none;
+}
 .new-quote {
 	display: block;
 	width: 40em;

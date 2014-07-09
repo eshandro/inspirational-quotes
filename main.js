@@ -49,6 +49,14 @@ $(document).on('ready', function() {
 		// Clears out the input fields
 		$(this).siblings('.author-name').val('');
 		$(this).siblings('.new-quote').val('');
+
+		// Closes the form
+		$('.quote-form').slideUp('500');
+	});
+
+	// Shows the add a quote form
+	$('.add-quote').on('click', function() {
+		$('.quote-form').slideDown('1000');
 	});
 });
 
