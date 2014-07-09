@@ -1,0 +1,87 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #558C89;
+}
+
+h1, h2, h3, h4 {
+	font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
+}
+
+.wrapper {
+	margin: 40px auto;
+	background-color: #558C89;
+}
+
+.container {
+	float: left;
+	width: 100%;
+
+
+}
+
+header {
+	background-color: #74AFAD;
+	color: #ECECEA;
+	text-align: center;
+	padding: 10px;
+	border-radius: 20px;
+
+}
+
+.left-side {
+	background-color: #558C89;
+	width: 200px;
+	float: left;
+}
+
+.main-content {
+	float: left;
+	width: 70%;
+	max-width: 700px;
+	background-color: #ECECEA;
+	border-radius: 10px;
+	padding: 0px 20px 20px;
+	margin: 20px 0;
+}
+
+.new-quote {
+	display: block;
+	width: 40em;
+	height: 10em;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.author-name {
+	display: inline-block;
+	width: 20em;
+	height: 2.5em;
+	border-radius: 5px;
+	margin-top: 20px;
+}
+
+.author-name-label {
+	display: inline-block;
+	width: 10em;
+	height: 1em;
+}
+
+.submit, .reset {
+	display: inline-block;
+	float: right;
+	margin-top: 20px;
+	margin-right:20px;
+}
+
+.button {
+	display: inline-block;
+	background-color: #D9853B;
+	border-radius: 10px;
+	width: 80px;
+	color: #ECECEA;
+	padding: 5px;
+	text-align: center;
+}
