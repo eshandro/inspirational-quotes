@@ -85,3 +85,9 @@ header {
 	padding: 5px;
 	text-align: center;
 }
+
+.author-display { 
+	text-align: right;
+	margin-top: -1em;
+	padding-right: 10px;
+}
