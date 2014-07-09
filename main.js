@@ -8,17 +8,18 @@ var Quote = function(author, newquote, rating) {
 		rating = 0;
 	}
 	this.rating = [rating];
+	
 	// Keeps running rating average
 	this.ratingAvg = averageArray(this.rating);
 
-	// Creates quote html element
-	this.createElem  = function () {
-		var quoteItem = $('<li class="quote-item"></li>');
-		return quoteItem;
-	}
-	// Adds new quote to array of allQuotes
 	allQuotes.push(this);
 }
+// Creates li elem for each new quote
+Quote.prototype.createElem = function () {
+		var quoteItem = $('<li class="quote-item popup"></li>');
+		return quoteItem;
+	};
+
 
 var averageArray = function (array) {
 	return _.reduce(array, function(memo, num) 
@@ -35,7 +36,7 @@ $(document).on('ready', function() {
 		event.preventDefault();
 		
 		// Creates new Quote 
-		new Quote($(this).siblings('.author-name').val(), $(this).siblings('.new-quote').val());
+		var storeQuote = new Quote($(this).siblings('.author-name').val(), $(this).siblings('.new-quote').val());
 		
 		// Takes new quote info and displays it to the page
 		var newQuote = $('<p>' + allQuotes[allQuotes.length-1].quote + '</p>');
@@ -46,6 +47,10 @@ $(document).on('ready', function() {
 		newQuoteItem.append(newAuthorName);
 		$('.list-of-quotes').append(newQuoteItem);
 		
+		// Stores new quote into local storage
+		console.log(storeQuote);
+		localStorage.setItem('storedQuote', JSON.stringify(storeQuote));
+
 		// Clears out the input fields
 		$(this).siblings('.author-name').val('');
 		$(this).siblings('.new-quote').val('');
@@ -58,5 +63,12 @@ $(document).on('ready', function() {
 	$('.add-quote').on('click', function() {
 		$('.quote-form').slideDown('1000');
 	});
+
+	// Pop-up for selected quote from list
+	$(document).on('click', '.quote-item', function() {
+		console.log($(this));
+		var quotePop = { content : $(this) };
+		$('.popup').popup(quotePop);
+	})
 });
 
