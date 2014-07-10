@@ -105,3 +105,41 @@ header {
 .list-of-quotes {
 	padding-left: 20px;
 }
+
+/* Popup styling */
+.popup-back {
+	height: 100%;
+	left: 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+	background-color: rgba(64,64,64,.7);	
+}
+
+.popup-cont {
+	position: fixed;
+	z-index: 102;
+	width: 40%;
+	font-size: 14px;
+	background: #ECECEA;
+	padding: 25px;
+	box-shadow: 0 3px 10px #222;
+	border-radius: 10px;
+	top:50%;
+	left: 30%;	
+}
+
+.popup-close {
+	position: absolute;
+	top: 0;
+	right: 5px;
+	font-style: 18px;
+	color: #74AFAD;
+	cursor: pointer;
+	padding: 5px;
+}
+
+.popup-close:hover {
+	color: #D9853B;
+}
