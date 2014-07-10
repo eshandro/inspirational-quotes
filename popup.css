@@ -17,6 +17,8 @@
 	position: fixed;
 	z-index: 102;
 	width: 40%;
+	font-size: 14px;
+	
 }
 
 .preloader {
