@@ -35,6 +35,7 @@ header {
 	background-color: #558C89;
 	width: 200px;
 	float: left;
+	padding: 0 10px;
 }
 
 .main-content {
@@ -93,4 +94,14 @@ header {
 	text-align: right;
 	margin-top: -1em;
 	padding-right: 10px;
+}
+
+.quote-item:hover {
+	color: #D9853B;
+	cursor: pointer;
+
+}
+
+.list-of-quotes {
+	padding-left: 20px;
 }

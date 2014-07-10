@@ -48,7 +48,6 @@ $(document).on('ready', function() {
 		$('.list-of-quotes').append(newQuoteItem);
 		
 		// Stores new quote into local storage
-		console.log(storeQuote);
 		localStorage.setItem('storedQuote', JSON.stringify(storeQuote));
 
 		// Clears out the input fields

@@ -16,7 +16,7 @@
 .popup_cont {
 	position: fixed;
 	z-index: 102;
-	/*width: 40%;*/
+	width: 40%;
 }
 
 .preloader {
@@ -43,7 +43,7 @@
 }
 
 .popup_back {
-	cursor: pointer;
+	/*cursor: pointer;*/
 	background-color: rgba(64,64,64,.7);
 }
 
