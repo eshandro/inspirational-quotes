@@ -39,10 +39,11 @@ Quote.prototype.getFromLocal = function() {
 
 // Finds average of array of numbers 
 var averageRatingArray = function (array) {
-	return _.reduce(array, function(memo, num) 
+	var compactArray = _.compact(array);
+	return _.reduce(compactArray, function(memo, num) 
 		{
 			return memo + num;
-		}, 0) / array.length-1;
+		}, 0) / compactArray.length;
 }
 
 // function to find index of a specific quote
@@ -78,7 +79,6 @@ var displayAllQuotes = function() {
 		tempItem.after(ratyDiv);
 		ratyDiv.raty({ score: allQuotes[i].ratingAvg,
 						hints: [null, null, null, null, null] });
-		// tempItem.append(ratyDiv);
 
 	}
 	return quotesList;
@@ -107,8 +107,12 @@ displayAllQuotes();
 		var newQuoteItem = allQuotes[allQuotes.length-1].createElem();
 		newQuoteItem.append(newQuote);
 		newQuoteItem.append(newAuthorName);
-		newQuoteItem.raty({ score: storeQuote.ratingAvg });
 		$('.list-of-quotes').append(newQuoteItem);
+		
+		// Adds star rating system
+		var ratyDiv = $('<div class="raty-div">');
+		newQuoteItem.after(ratyDiv);
+		ratyDiv.raty({ score: storeQuote.ratingAvg });
 		
 		// Stores new quote into local storage
 		// localStorage.setItem('storedQuote', JSON.stringify(storeQuote));
@@ -138,9 +142,13 @@ displayAllQuotes();
 		$('.popup-cont').append(quotePop);
 		
 		// Removes cloned rating stars
-		$('.popup-cont').find('.raty-div').remove();
-		
-		$('.popup-cont').raty({ hints: [null, null, null, null, null]});
+		// $('.popup-cont').find('.raty-div').remove();
+		var ratyDiv = $('<div class="raty-div">');
+		$('.popup-cont').children('li').after(ratyDiv);
+
+		ratyDiv.raty({ hints: [null, null, null, null, null] });
+
+		// $('.popup-cont').raty({ hints: [null, null, null, null, null]});
 		$('.popup-cont').append('<p class="rate-label">Rate this quote</p>');
 		$('.popup-cont').append('<span class="popup-close">X');		
 	});
@@ -152,7 +160,7 @@ displayAllQuotes();
 	})
 
 	// Update rating on star click
-	$(document).on('click', '.raty-div > img', function(){
+	$(document).on('click', '.list-of-quotes .raty-div > img', function(){
 		// Get rating value from this quote
 		var newRating = +$(this).siblings('input').attr('value');
 
