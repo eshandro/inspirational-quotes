@@ -25,8 +25,6 @@ Quote.prototype.updateRating = function(newRating) {
 	this.ratingAvg = averageRatingArray(this.rating);
 }
 
-
-
 // Adds quote to local storage
 Quote.prototype.addToLocal = function(storeQuote) {
 		localStorage.setItem('storedQuote', JSON.stringify(storeQuote));	
@@ -56,6 +54,22 @@ var findQuoteIndex = function (quote) {
 	return -1;
 };
 
+// Find all quotes by an author
+var findAllQuotesBy = function(quote) {
+	var authorAll = [];
+	var indexCurrent = findQuoteIndex(quote);
+	var currentAuthor = allQuotes[indexCurrent].author;
+	// Makes current author the first element of the authorAll array
+	authorAll.push(currentAuthor);
+	// loop through allQuotes to find all by current author
+	for (i=0; i<allQuotes.length; i++) {
+		if (allQuotes[i].author === currentAuthor) {
+			authorAll.push(allQuotes[i].quote);
+		}
+	};
+	return authorAll;
+}
+
 // Sorts array by ratingAvg value 
 var sortAllQuotes = function (array) {
 	array = _.sortBy(array, function(item) {
@@ -84,6 +98,27 @@ var displayAllQuotes = function() {
 	return quotesList;
 };
 
+// Find a random quote and create display element
+var randomQuoteMaker = function (array) {
+	// Find random Quote from array
+	var random = _.sample(array);
+	// Pull out quote and author from random Quote
+	var randomQuote = random.quote;
+	var randomAuthor = random.author;
+	// Create new li for random quote
+	var randomDisplay = random.createElem();
+	randomDisplay.append('<p class="quote-para"><q>' + randomQuote + '</q></p>');
+	randomDisplay.append('<p class="author-display">&mdash;' + randomAuthor + '</p>');
+
+	// Add star rating to random quote display
+	var ratyDiv = $('<div class="raty-div">');
+	randomDisplay.after(ratyDiv);
+	ratyDiv.raty({ score: random.ratingAvg, 
+					hints: [null, null, null, null, null]});
+	return randomDisplay;
+
+}
+
 
 // Make some sample quotes to add to page 
 new Quote('Winston Churchill','Success is not final, failure is not fatal: it is the courage to continue that counts.', 5);
@@ -91,8 +126,13 @@ new Quote('Albert Einstein','Try not to become a man of success, but rather try 
 new Quote('Albert Einstein','Two things are infinite: the universe and human stupidity; and I\'m not sure about the universe.', 4);
 
 $(document).on('ready', function() {
+	// Displays all known quotes on page load
+	displayAllQuotes();
 
-displayAllQuotes();
+	// Displays Quote of the Day on new page load
+	$('.quote-of-day').append(randomQuoteMaker(allQuotes));
+	
+	// Adding new quotes to the page
 	$(document).on('click', '.submit', function(event) {
 		// Stops submit button from refreshing page
 		event.preventDefault();
@@ -133,23 +173,31 @@ displayAllQuotes();
 
 	// Pop-up for selected quote from list
 	$(document).on('click', '.quote-item', function(event) {
-		var quotePop = $(this).clone();
+		// var quotePop = $('<li class="popup-quote">');
 		// Removes this click event from popup
-		quotePop.removeClass('quote-item');	
-
+		// quotePop.removeClass('quote-item');	
+		
+		// Create pop-up lightbox
 		$('body').append('<div class="popup-back">');
 		$('body').append('<div class="popup-cont">');
-		$('.popup-cont').append(quotePop);
 		
-		// Removes cloned rating stars
-		// $('.popup-cont').find('.raty-div').remove();
-		var ratyDiv = $('<div class="raty-div">');
-		$('.popup-cont').children('li').after(ratyDiv);
+		// Get all quotes from current author
+		var currentQuote = $(this).find('.quote-para').text();
+		var allByAuthor = findAllQuotesBy(currentQuote);
 
-		ratyDiv.raty({ hints: [null, null, null, null, null] });
+		// Append all quotes by current author and stars
+		for(i=1; i<allByAuthor.length; i++) {
+			var quotePop = $('<li class="popup-quote">');	
+			var quoteText = $('<p class="quote-para"><q>' + allByAuthor[i] + '</q></p>');
+			var quoteAuthor = $('<p class="author-display">&mdash;' + allByAuthor[0]+ '</p>');
+			quotePop.append(quoteText);
+			quotePop.append(quoteAuthor);
+			$('.popup-cont').append(quotePop);			
+			var ratyDiv = $('<div class="raty-div">');
+			$('.popup-cont').children('li').after(ratyDiv);
+			ratyDiv.raty({ hints: [null, null, null, null, null] });
+		}
 
-		// $('.popup-cont').raty({ hints: [null, null, null, null, null]});
-		$('.popup-cont').append('<p class="rate-label">Rate this quote</p>');
 		$('.popup-cont').append('<span class="popup-close">X');		
 	});
 
@@ -159,8 +207,9 @@ displayAllQuotes();
 		$('.popup-back').remove();
 	})
 
-	// Update rating on star click
-	$(document).on('click', '.list-of-quotes .raty-div > img', function(){
+	// Update rating on star click and display new sorted list
+	$(document).on('click', '.raty-div > img', function(){
+		console.log('Clicked');
 		// Get rating value from this quote
 		var newRating = +$(this).siblings('input').attr('value');
 
@@ -177,13 +226,25 @@ displayAllQuotes();
 		$(this).siblings('input').attr('value', allQuotes[index].ratingAvg);
 
 		// Remove current list and Sort allQuotes and display to page
-		$('.quote-item').remove();
-		$('.raty-div').remove();
+		$('.list-of-quotes .quote-item').remove();
+		$('.list-of-quotes .raty-div').remove();
 		displayAllQuotes();
 
+	});
 
+
+	// Display random quote when button clicked
+	$('.random-quote').on('click', function() {
+		// Makes pop up for random quote
+		$('body').append('<div class="popup-back">');
+		$('body').append('<div class="popup-cont">');
+		$('.popup-cont').append(randomQuoteMaker(allQuotes));
+		$('.popup-cont').append('<p class="rate-label">Rate this quote</p>');
+		$('.popup-cont').append('<span class="popup-close">X');
+
+		var ratyDiv = $('<div class="raty-div">');
+		$('.popup-cont').children('li').after(ratyDiv);
+		ratyDiv.raty({ hints: [null, null, null, null, null] });		
 	})
-
-
 });
 
