@@ -105,17 +105,23 @@ var randomQuoteMaker = function (array) {
 	// Pull out quote and author from random Quote
 	var randomQuote = random.quote;
 	var randomAuthor = random.author;
+	
+	// Create wrapper for popup and stars
+	var quoteWrapper = $('<div class="quote-wrapper">');
+
 	// Create new li for random quote
 	var randomDisplay = random.createElem();
+	// Turn off on click event by removing class
+	randomDisplay.removeClass('quote-item');
 	randomDisplay.append('<p class="quote-para"><q>' + randomQuote + '</q></p>');
 	randomDisplay.append('<p class="author-display">&mdash;' + randomAuthor + '</p>');
-
+	quoteWrapper.append(randomDisplay);
 	// Add star rating to random quote display
 	var ratyDiv = $('<div class="raty-div">');
-	randomDisplay.after(ratyDiv);
+	quoteWrapper.append(ratyDiv);
 	ratyDiv.raty({ score: random.ratingAvg, 
 					hints: [null, null, null, null, null]});
-	return randomDisplay;
+	return quoteWrapper;
 
 }
 
@@ -173,9 +179,6 @@ $(document).on('ready', function() {
 
 	// Pop-up for selected quote from list
 	$(document).on('click', '.quote-item', function(event) {
-		// var quotePop = $('<li class="popup-quote">');
-		// Removes this click event from popup
-		// quotePop.removeClass('quote-item');	
 		
 		// Create pop-up lightbox
 		$('body').append('<div class="popup-back">');
@@ -193,9 +196,17 @@ $(document).on('ready', function() {
 			quotePop.append(quoteText);
 			quotePop.append(quoteAuthor);
 			$('.popup-cont').append(quotePop);			
+			
+			// Find rating of current quote
+			var indexCurrentInAllQuotes = findQuoteIndex(allByAuthor[i]);
+			console.log(indexCurrentInAllQuotes);
+			var currentQuoteRating = allQuotes[indexCurrentInAllQuotes].ratingAvg;
+			console.log(currentQuoteRating)
+
 			var ratyDiv = $('<div class="raty-div">');
 			$('.popup-cont').children('li').after(ratyDiv);
-			ratyDiv.raty({ hints: [null, null, null, null, null] });
+			ratyDiv.raty({ score: currentQuoteRating,
+							hints: [null, null, null, null, null] });
 		}
 
 		$('.popup-cont').append('<span class="popup-close">X');		
@@ -239,12 +250,13 @@ $(document).on('ready', function() {
 		$('body').append('<div class="popup-back">');
 		$('body').append('<div class="popup-cont">');
 		$('.popup-cont').append(randomQuoteMaker(allQuotes));
-		$('.popup-cont').append('<p class="rate-label">Rate this quote</p>');
+
 		$('.popup-cont').append('<span class="popup-close">X');
 
-		var ratyDiv = $('<div class="raty-div">');
-		$('.popup-cont').children('li').after(ratyDiv);
-		ratyDiv.raty({ hints: [null, null, null, null, null] });		
+		// var ratyDiv = $('<div class="raty-div">');
+		// $('.popup-cont').children('li').after(ratyDiv);
+		// ratyDiv.raty({ hints: [null, null, null, null, null],
+		// 				score:  });		
 	})
 });
 
