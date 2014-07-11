@@ -143,3 +143,7 @@ header {
 .popup-close:hover {
 	color: #D9853B;
 }
+
+.rate-label {
+	margin-top: 2px;
+}
