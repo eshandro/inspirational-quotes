@@ -94,7 +94,6 @@ var displayAllQuotes = function() {
 		tempItem.after(ratyDiv);
 		ratyDiv.raty({ score: allQuotes[i].ratingAvg,
 						hints: [null, null, null, null, null] });
-
 	}
 	return quotesList;
 };
@@ -112,11 +111,13 @@ var randomQuoteMaker = function (array) {
 
 	// Create new li for random quote
 	var randomDisplay = random.createElem();
+	
 	// Turn off on click event by removing class
 	randomDisplay.removeClass('quote-item');
 	randomDisplay.append('<p class="quote-para"><q>' + randomQuote + '</q></p>');
 	randomDisplay.append('<p class="author-display">&mdash;' + randomAuthor + '</p>');
 	quoteWrapper.append(randomDisplay);
+	
 	// Add star rating to random quote display
 	var ratyDiv = $('<div class="raty-div">');
 	quoteWrapper.append(ratyDiv);
@@ -125,7 +126,6 @@ var randomQuoteMaker = function (array) {
 	return quoteWrapper;
 
 }
-
 
 // Make some sample quotes to add to page 
 new Quote('Winston Churchill','Success is not final, failure is not fatal: it is the courage to continue that counts.', 5);
@@ -160,10 +160,6 @@ $(document).on('ready', function() {
 		var ratyDiv = $('<div class="raty-div">');
 		newQuoteItem.after(ratyDiv);
 		ratyDiv.raty({ score: storeQuote.ratingAvg });
-		
-		// Stores new quote into local storage
-		// localStorage.setItem('storedQuote', JSON.stringify(storeQuote));
-		// storeQuote.addToLocal(storeQuote);
 
 		// Clears out the input fields
 		$(this).siblings('.author-name').val('');
@@ -269,6 +265,7 @@ $(document).on('ready', function() {
 		$('.list-of-quotes .raty-div').remove();
 		displayAllQuotes();
 	});
+	
 	$(document).on('click', '.undo', function () {
 		allQuotes.push(tempHoldDelete[0]);
 		tempHoldDelete = []
@@ -280,7 +277,5 @@ $(document).on('ready', function() {
 		$('.list-of-quotes .raty-div').remove();
 		displayAllQuotes();
 	});
-
-
 });
 
