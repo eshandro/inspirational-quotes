@@ -40,17 +40,18 @@ header {
 
 .main-content {
 	float: left;
-	width: 70%;
+	width: 65%;
 	max-width: 700px;
 	background-color: #ECECEA;
 	border-radius: 10px;
 	padding: 0px 20px 20px;
-	margin: 20px 0;
+	margin: 20px 0 20px 20px;
 }
 
 .quote-form {
 	display: none;
 }
+
 .new-quote {
 	display: block;
 	width: 40em;
@@ -88,12 +89,19 @@ header {
 	color: #ECECEA;
 	padding: 5px;
 	text-align: center;
+	cursor: pointer;
 }
 
 .delete {
-	
+	position: absolute;
+	left: 250px;
+	top: 50px;
 }
-
+.undo {
+	position: absolute;
+	left: 250px;
+	top: 50px;
+}
 .author-display { 
 	text-align: right;
 	margin-top: -1em;
@@ -111,6 +119,9 @@ header {
 }
 
 /* Popup styling */
+.popup-quote {
+	position: relative;
+}
 .popup-back {
 	height: 100%;
 	left: 0;
@@ -130,7 +141,7 @@ header {
 	padding: 25px;
 	box-shadow: 0 3px 10px #222;
 	border-radius: 10px;
-	top:50%;
+	top: 30%;
 	left: 30%;	
 }
 

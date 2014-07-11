@@ -1,4 +1,5 @@
 var allQuotes = [];
+var tempHoldDelete = [];
 
 var Quote = function(author, newquote, rating) {
 	this.author = author;
@@ -62,7 +63,7 @@ var findAllQuotesBy = function(quote) {
 	// Makes current author the first element of the authorAll array
 	authorAll.push(currentAuthor);
 	// loop through allQuotes to find all by current author
-	for (i=0; i<allQuotes.length; i++) {
+	for (var i=0; i<allQuotes.length; i++) {
 		if (allQuotes[i].author === currentAuthor) {
 			authorAll.push(allQuotes[i].quote);
 		}
@@ -82,7 +83,7 @@ var sortAllQuotes = function (array) {
 var displayAllQuotes = function() {
 	sortAllQuotes(allQuotes);
 	var quotesList = $('.list-of-quotes');
-	for (i=0; i<allQuotes.length; i++) {
+	for (var i=0; i<allQuotes.length; i++) {
 		var tempItem = allQuotes[i].createElem();
 		tempItem.append('<p class="quote-para"><q>' + allQuotes[i].quote) + '</q></p>';
 		tempItem.append('<p class="author-display">&mdash;' + allQuotes[i].author + '</p>');
@@ -187,29 +188,28 @@ $(document).on('ready', function() {
 		// Get all quotes from current author
 		var currentQuote = $(this).find('.quote-para').text();
 		var allByAuthor = findAllQuotesBy(currentQuote);
-
 		// Append all quotes by current author and stars
-		for(i=1; i<allByAuthor.length; i++) {
+		for(var i=1; i<allByAuthor.length; i++) {
 			var quotePop = $('<li class="popup-quote">');	
 			var quoteText = $('<p class="quote-para"><q>' + allByAuthor[i] + '</q></p>');
 			var quoteAuthor = $('<p class="author-display">&mdash;' + allByAuthor[0]+ '</p>');
 			quotePop.append(quoteText);
 			quotePop.append(quoteAuthor);
+			quotePop.prepend('<button class="button delete">Delete Quote');			
 			$('.popup-cont').append(quotePop);			
 			
 			// Find rating of current quote
-			var indexCurrentInAllQuotes = findQuoteIndex(allByAuthor[i]);
-			console.log(indexCurrentInAllQuotes);
-			var currentQuoteRating = allQuotes[indexCurrentInAllQuotes].ratingAvg;
-			console.log(currentQuoteRating)
+			var indexCurrent = findQuoteIndex(allByAuthor[i]);
+			var currentQuoteRating = allQuotes[indexCurrent].ratingAvg;
 
 			var ratyDiv = $('<div class="raty-div">');
 			$('.popup-cont').children('li').after(ratyDiv);
 			ratyDiv.raty({ score: currentQuoteRating,
-							hints: [null, null, null, null, null] });
-		}
+							hints: [null, null, null, null, null ]});	
+		};
 
-		$('.popup-cont').append('<span class="popup-close">X');		
+		$('.popup-cont').append('<span class="popup-close">X');
+
 	});
 
 	// Remove pop-up on click
@@ -220,7 +220,7 @@ $(document).on('ready', function() {
 
 	// Update rating on star click and display new sorted list
 	$(document).on('click', '.raty-div > img', function(){
-		console.log('Clicked');
+
 		// Get rating value from this quote
 		var newRating = +$(this).siblings('input').attr('value');
 
@@ -243,7 +243,6 @@ $(document).on('ready', function() {
 
 	});
 
-
 	// Display random quote when button clicked
 	$('.random-quote').on('click', function() {
 		// Makes pop up for random quote
@@ -252,11 +251,36 @@ $(document).on('ready', function() {
 		$('.popup-cont').append(randomQuoteMaker(allQuotes));
 
 		$('.popup-cont').append('<span class="popup-close">X');
-
-		// var ratyDiv = $('<div class="raty-div">');
-		// $('.popup-cont').children('li').after(ratyDiv);
-		// ratyDiv.raty({ hints: [null, null, null, null, null],
-		// 				score:  });		
 	})
+
+	// Delete button functionality - remove quote - and undo
+	$(document).on('click', '.delete', function () {
+		var testQuote = $(this).next('.quote-para').text();
+		var indexCurrent = findQuoteIndex(testQuote);
+		// Before delete put in tempHoldDelete array
+		tempHoldDelete.push(allQuotes[indexCurrent]);
+
+		$(this).text('Undo Delete');
+		$(this).removeClass('delete');
+		$(this).addClass('undo');
+		allQuotes.splice(indexCurrent, 1);
+		
+		$('.list-of-quotes .quote-item').remove();
+		$('.list-of-quotes .raty-div').remove();
+		displayAllQuotes();
+	});
+	$(document).on('click', '.undo', function () {
+		allQuotes.push(tempHoldDelete[0]);
+		tempHoldDelete = []
+		$(this).text('Delete Quote');
+		$(this).removeClass('undo');
+		$(this).addClass('delete');
+		
+		$('.list-of-quotes .quote-item').remove();
+		$('.list-of-quotes .raty-div').remove();
+		displayAllQuotes();
+	});
+
+
 });
 
